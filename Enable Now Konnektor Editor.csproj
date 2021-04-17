@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>Enable_Now_Konnektor_Editor</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Enable Now Konnektor Editor</AssemblyName>
+    <ApplicationIcon>enable-now-konnektor.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="config.json" />
+    <None Remove="enable-now-konnektor-white.ico" />
+    <None Remove="enable-now-konnektor.ico" />
+    <None Remove="jobs\00-sap-enable-now.json" />
+    <None Remove="jobs\09-enable-now.json" />
+    <None Remove="jobs\97-enable-now.json" />
+    <None Remove="properties.json" />
+    <None Remove="recent-jobs.json" />
+    <None Remove="src\resources\enable-now-konnektor.png" />
+    <None Remove="src\resources\fontawesome.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="jobs\00-sap-enable-now.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="properties.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="recent-jobs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="enable-now-konnektor-white.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="enable-now-konnektor.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\enable-now-konnektor.png" />
+    <Resource Include="src\resources\fontawesome.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Enable Now Konnektor Bibliothek\Enable Now Konnektor Bibliothek.csproj" />
+  </ItemGroup>
+
+</Project>

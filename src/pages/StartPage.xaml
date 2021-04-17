@@ -1,0 +1,50 @@
+﻿<Page x:Class="Enable_Now_Konnektor_Editor.src.pages.StartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:Enable_Now_Konnektor_Editor.src.pages"
+      xmlns:controls="clr-namespace:Enable_Now_Konnektor_Editor.src.controls"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="Startseite">
+    <Border Style="{StaticResource SettingsBorderStyle}"
+            Padding="16,16,128,6">
+        <Grid Style="{StaticResource BaseGridStyle}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource HeaderTextblockStyle}"
+                       Grid.ColumnSpan="2"
+                       Margin="0,0,0,16">Startseite</TextBlock>
+            <Grid Grid.Row="1"
+                        Margin="0,0,16,16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource Header2TextblockStyle}">Zuletzt verwendetes öffen</TextBlock>
+                <controls:SearchControl Grid.Row="1" x:Name="SearchField"></controls:SearchControl>
+                <ListView Grid.Row="2"
+                          Style="{StaticResource JobExplorerListviewStyle}"
+                          SelectionChanged="RecentJobsListView_SelectionChanged"
+                          x:Name="RecentJobsListView"></ListView>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="16,0,0,0">
+                <TextBlock Style="{StaticResource Header2TextblockStyle}">Los geht's</TextBlock>
+                <Button Style="{StaticResource StartpageButtonStyle}"
+                        Tag="Neuen Job erstellen"
+                        Click="Button_Click">&#xf15b;</Button>
+            </StackPanel>
+        </Grid>
+
+    </Border>
+</Page>

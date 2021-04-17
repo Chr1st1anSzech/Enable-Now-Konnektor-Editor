@@ -1,0 +1,19 @@
+﻿<Application x:Class="Enable_Now_Konnektor_Editor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Enable_Now_Konnektor_Editor"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/src/resources/Colors.xaml" />
+                <ResourceDictionary Source="/src/resources/Styles.xaml" />
+                <ResourceDictionary Source="/src/resources/Templates.xaml" />
+                <ResourceDictionary Source="/src/resources/TitleBarStyles.xaml" />
+                <ResourceDictionary Source="/src/resources/Constants.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
+    </Application.Resources>
+</Application>

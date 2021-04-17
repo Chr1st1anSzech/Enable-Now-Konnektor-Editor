@@ -1,0 +1,606 @@
+﻿{
+	"Konnektor": [
+		{
+			"FriendlyName": "Services",
+			"Properties": [
+				{
+					"Name": "IndexUrl",
+					"FriendlyName": "URL zum Indexieren",
+					"Explanation" : "Die URL des iFinder5 Search-Service zum Indexieren.",
+					"Type": "string",
+					"Validate": "^https?://.*$"
+				},
+				{
+					"Name": "RemoveUrl",
+					"FriendlyName": "URL zum Löschen",
+					"Explanation" : "Die URL des iFinder5 Search-Service zum Löschen.",
+					"Type": "string",
+					"Validate": "^https?://.*$"
+				},
+				{
+					"Name": "ConverterUrl",
+					"FriendlyName": "URL des Converter Services",
+					"Explanation" : "Die URL des iFinder5 Converter-Service.",
+					"Type": "string",
+					"Validate": "^https?://.*$"
+				},
+				{
+					"Name": "FetchUrl",
+					"FriendlyName": "URL zur Abfrage",
+					"Explanation" : "Die URL des iFinder5 Search-Service zum Abfragen eines Dokuments.",
+					"Type": "string",
+					"Validate": "^https?://.*$"
+				}
+			]
+		},
+		{
+			"FriendlyName": "Fehlertoleranz",
+			"Properties": [
+				{
+					"Name": "MaxErrorCount",
+					"FriendlyName": "Maximale Fehlerzahl",
+					"Explanation" : "Die maximale Anzahl an Fehler, nachdem das Programm beendet werden soll.",
+					"Type": "int",
+					"Validate": "^\\d+$"
+				},
+				{
+					"Name": "MaxMinutesRuntime",
+					"FriendlyName": "Maximale Laufzeit",
+					"Explanation" : "Die maximale Laufzeit, nachdem das Programm beendet werden soll.",
+					"Type": "int",
+					"Validate": "^\\d+$"
+				}
+			]
+		},
+		{
+			"FriendlyName": "Metadatei-Bezeichner",
+			"Properties": [
+				{
+					"Name": "LessonIdentifier",
+					"FriendlyName": "Bezeichner für lesson.js",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "EntityIdentifier",
+					"FriendlyName": "Bezeichner für entity.txt",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "SlideIdentifier",
+					"FriendlyName": "Bezeichner für slide.js",
+					"Type": "string",
+					"Validate": ".*"
+				}
+			]
+		},
+		{
+			"FriendlyName": "Anderes",
+			"Properties": [
+				{
+					"Name": "ConverterFieldsIdentifier",
+					"FriendlyName": "iF-Bezeichner für Felder",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "ConverterApplicationDefaultMapping",
+					"FriendlyName": "Standardwert für Feld Applikation",
+					"Type": "string",
+					"Validate": ".*"
+				}
+			]
+		},
+		{
+			"FriendlyName": "Technisches",
+			"Properties": [
+				{
+					"Name": "StringIdentifier",
+					"FriendlyName": "iFinder-Datentyp für Text",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "FacetIdentifier",
+					"FriendlyName": "iFinder-Datentyp für Facetten",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "LongIdentifier",
+					"FriendlyName": "iFinder-Datentyp für long",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "UidFieldName",
+					"FriendlyName": "iFinder-Feldname für UID",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "ClassFieldName",
+					"FriendlyName": "iFinder-Feldname für Klasse",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "UrlFieldName",
+					"FriendlyName": "iFinder-Feldname für URL",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "DateFieldName",
+					"FriendlyName": "iFinder-Feldname für Datum",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "BodyFieldName",
+					"FriendlyName": "iFinder-Feldname für Inhalt",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "MimeTypeFieldName",
+					"FriendlyName": "iFinder-Feldname für Mimetype",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "ApplicationFieldName",
+					"FriendlyName": "iFinder-Feldname für Applikation",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "ContentTypeFieldName",
+					"FriendlyName": "iFinder-Feldname für Content Type",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AutostartIdentifier",
+					"FriendlyName": "Enable Now-Feldname für Autostart-Element",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AssetsIdentifier",
+					"FriendlyName": "Enable Now-Feldname für Anhang",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "UidIdentifier",
+					"FriendlyName": "Enable Now-Feldname für UID",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "TypeIdentifier",
+					"FriendlyName": "Enable Now-Feldname für Typ",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "DocuIdentifier",
+					"FriendlyName": "Enable Now-Feldname für Dokumente",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "FileNameIdentifier",
+					"FriendlyName": "Enable Now-Feldname für Dokumentname",
+					"Type": "string",
+					"Validate": ".*"
+				}
+			]
+		}
+	],
+
+	"Allgemein" : [
+		{
+			"FriendlyName" : "Allgemeines",
+			"Properties" : [
+				{
+					"Name": "Id",
+					"FriendlyName": "Job-Identifikationsnummer",
+					"Explanation" : "Eine eindeutige Bezeichnung des Jobs. Erlaubt sind Buchstaben, Zahlen, Bindestrich und Unterstrich",
+					"Readonly" : true,
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "StartId",
+					"FriendlyName": "UID des Startelements",
+					"Explanation" : "Die UID des Enable Now Elements, an dem die Indexierung starten soll.",
+					"Type": "string",
+					"Validate": ".*"
+				}
+			]
+		},
+		{
+			"FriendlyName": "Proxy",
+			"Properties": [
+				{
+					"Name": "UseProxy",
+					"FriendlyName": "Proxy aktiviert",
+					"Explanation" : "Ein konfigurierter Proxy wird für HTTP-Anfragen verwendet.",
+					"Type": "bool"
+				},
+				{
+					"Name": "UseSystemProxy",
+					"FriendlyName": "System-Proxy verwenden",
+					"Explanation" : "Der im System konfigurierten Proxy verwenden.",
+					"Type": "bool"
+				},
+				{
+					"Name": "ProxyUrl",
+					"FriendlyName": "Proxy-URL",
+					"Explanation" : "Die URL des Proxys.",
+					"Type": "string",
+					"Validate": "^https?://.*$"
+				},
+				{
+					"Name": "ProxyPort",
+					"FriendlyName": "Proxy-Port",
+					"Explanation" : "Der Port des Proxys.",
+					"Type": "int",
+					"Validate": "^\\d+$"
+				},
+				{
+					"Name": "UseCredentials",
+					"FriendlyName": "Anmeldedaten verwenden",
+					"Explanation" : "Individueller Benutzername und Passwort verwenden.",
+					"Type": "bool"
+				},
+				{
+					"Name": "ProxyUsername",
+					"FriendlyName": "Proxy-Benutzername",
+					"Explanation" : "Benutzername zur Anmeldung am Proxy.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "ProxyPassword",
+					"FriendlyName": "Proxy-Passwort",
+					"Explanation" : "Passwort zur Anmeldung am Proxy.",
+					"Type": "string",
+					"Validate": ".*"
+				}
+			]
+		},
+		{
+			"FriendlyName" : "URL",
+			"Properties" : [
+				{
+					"Name": "EntityPath",
+					"FriendlyName": "Pfad der entity.txt",
+					"Explanation" : "Ausdruck mit Platzhaltern, der den Dateisystempfad zu der entity.txt beschreibt.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "EntityUrl",
+					"FriendlyName": "URL der entity.txt",
+					"Explanation" : "Ausdruck mit Platzhaltern, der die URL zu der entity.txt beschreibt.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "ContentPath",
+					"FriendlyName": "Dateiverzeichnispfad des Inhalts",
+					"Explanation" : "Ausdruck mit Platzhaltern, der den Dateisystempfad zum Inhalt beschreibt.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "ContentUrl",
+					"FriendlyName": "URL des Inhalts",
+					"Explanation" : "Ausdruck mit Platzhaltern, der die URL zum Inhalt beschreibt.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "DemoUrl",
+					"FriendlyName": "URL der Demo",
+					"Explanation" : "Ausdruck mit Platzhaltern, der die URL zur Demos beschreibt.",
+					"Type": "string",
+					"Validate": ".*"
+				}
+			]
+		}
+	],
+	"E-Mail" : [
+		{
+			"FriendlyName" : "E-Mail",
+			"Properties" : [
+				{
+					"Name": "EmailSend",
+					"FriendlyName": "E-Mail aktivieren",
+					"Explanation" : "Sendet nach Abschluss des Jobs eine E-Mail.",
+					"Type": "bool"
+				},
+				{
+					"Name": "EmailRecipient",
+					"FriendlyName": "Empfänger",
+					"Explanation" : "Die Empfänger der E-Mail, die nach Abschluss des Jobs gesendet wird.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "EmailSender",
+					"FriendlyName": "Absender",
+					"Explanation" : "Der Absender der E-Mail, die nach Abschluss des Jobs gesendet wird.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "EmailSubject",
+					"FriendlyName": "Betreff",
+					"Explanation" : "Der Betreff der E-Mail, die nach Abschluss des Jobs gesendet wird.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "EmailSmtpServer",
+					"FriendlyName": "Name des SMTP-Servers",
+					"Explanation" : "Der Name des SMTP-Servers, um E-Mails zu verschicken.",
+					"Type": "string",
+					"Validate": ".*"
+				},
+				{
+					"Name": "EmailPort",
+					"FriendlyName": "Port des SMTP-Servers",
+					"Explanation" : "Der Port des SMTP-Servers, um E-Mails zu verschicken.",
+					"Type": "int",
+					"Validate": ".*"
+				}
+			]
+		}
+	],
+	"Anmeldung" : [
+		{
+			"FriendlyName" : "Anmeldung",
+			"Properties" : [
+				{
+					"Name": "IsAuthRequired",
+					"FriendlyName": "Authentifizierung erforderlich",
+					"Explanation" : "Eine Authentifizierung wird ausgeführt."
+				},
+				{
+					"Name": "AuthType",
+					"FriendlyName": "Art der Authentifizierung",
+					"Explanation" : "Eine Formular- oder Basic-Authentifizierung wird ausgeführt.",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthFormId",
+					"FriendlyName": "Id des Formulars",
+					"Explanation" : "",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthFormUrl",
+					"FriendlyName": "URL des Formulars",
+					"Explanation" : "",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthFormMethod",
+					"FriendlyName": "Methode des Formulars",
+					"Explanation" : "",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthFormAdditionalParameters",
+					"FriendlyName": "Zusätzliche Formularparameter",
+					"Explanation" : ""
+				},
+				{
+					"Name": "AuthFormActionUrl",
+					"FriendlyName": "Action-URL des Formulars",
+					"Explanation" : "",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthFormActionAdditionalParameters",
+					"FriendlyName": "Zusätzliche Parameter des Action-Formulars",
+					"Explanation" : ""
+				},
+				{
+					"Name": "AuthUserControl",
+					"FriendlyName": "Name des Benutzername-Textfeldes",
+					"Explanation" : "",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthUser",
+					"FriendlyName": "Benutzername",
+					"Explanation" : "",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthPasswordControl",
+					"FriendlyName": "Name des Passwort-Textfeldes",
+					"Explanation" : "",
+					"Validate": ".*"
+				},
+				{
+					"Name": "AuthPassword",
+					"FriendlyName": "Passwort",
+					"Explanation" : "",
+					"Validate": ".*"
+				}
+			]
+		}
+	],
+
+	"Autostart" : [
+		{
+			"FriendlyName" : "Autostart",
+			"Properties" : [
+				{
+					"Name": "AutostartMetaMapping",
+					"FriendlyName": "Autostartwerte übernehmen",
+					"Explanation" : "Die Werte des Autostartelements werden auf das übergeordnete Element (z.B. Projekt, Gruppe) übernommen.",
+					"Type": "bool"
+				},
+				{
+					"Name": "AutostartChildOverwrite",
+					"FriendlyName": "Autostartwerte überschreiben",
+					"Explanation" : "Die Werte des Autostartelements ersetzen die Werte des übergeordneten Elements (z.B. Projekt, Gruppe).",
+					"Type": "bool"
+				},
+				{
+					"Name": "AutoStartMappingBlacklist",
+					"FriendlyName": "Ausnahmeliste für Felder",
+					"Explanation" : "Diese Felder des Autostartelements werden nicht auf das übergeordnete Element (z.B. Projekt, Gruppe) übernommen.",
+					"Type": "array"
+				}
+			]
+		}
+	],
+
+	"Indexierung" : [
+		{
+			"FriendlyName" : "Anhangdokumente",
+			"Properties" : [
+				{
+					"Name": "IndexAttachements",
+					"FriendlyName": "Anhänge indexieren",
+					"Explanation" : "Anhänge (Word, PDF,...) werden indexiert. Das übergeordnete Element (z.B. Projekt) dient als Vorlage.",
+					"Type": "bool"
+				},
+				{
+					"Name": "AttachementUrlOverwrite",
+					"FriendlyName": "URL des Anhangs übernehmen",
+					"Explanation" : "Der iFinder Treffer verlinkt auf den Anhang statt auf das übergeordnete Element (z.B. Projekt).",
+					"Type": "bool"
+				}
+			]
+		},
+		{
+			"FriendlyName" : "Indexierungs",
+			"Properties" : [
+				{
+					"Name": "IndexerType",
+					"FriendlyName": "Indexierungsart",
+					"Explanation" : "Protokoll zur Kommunikation mit dem iFinder Service.",
+					"Type": "enum"
+				},
+				{
+					"Name": "IndexSlides",
+					"FriendlyName": "Buchseiten indexieren",
+					"Explanation" : "Buchseiten werden indexiert.",
+					"Type": "bool"
+				},
+				{
+					"Name": "IndexGroups",
+					"FriendlyName": "Gruppen indexieren",
+					"Explanation" : "Gruppen werden indexiert.",
+					"Type": "bool"
+				},
+				{
+					"Name": "IndexProjects",
+					"FriendlyName": "Projekte indexieren",
+					"Explanation" : "Projekte werden indexiert.",
+					"Type": "bool"
+				},
+				{
+					"Name": "BlacklistFields",
+					"FriendlyName": "Ausnahmeliste Feldwerte",
+					"Explanation" : "Eine Liste mit Feldwerten, deren Dokument nicht indexiert werden soll.",
+					"Type": "dictionary"
+				},
+				{
+					"Name": "MustHaveFields",
+					"FriendlyName": "Felder, die Pflicht sind",
+					"Explanation" : "Felder, die zwingend vorhanden sein müssen, damit das Dokument indexiert wird.",
+					"Type": "array"
+				}
+			]
+		}
+	],
+
+	"Global" : [		
+		{
+			"FriendlyName" : "Global",
+			"Properties" : [
+				{
+					"Name": "GlobalMappings",
+					"FriendlyName": "Globale Abbildung von Feldern",
+					"Explanation" : "Abbildung von einfachen Textwerten, Feldern aus Enable Now und Funktionen auf Felder in iFinder. Die Konfiguration betrifft alle Elemente."
+				}
+			]
+		}
+	],
+
+	"Projekt" : [		
+		{
+			"FriendlyName" : "Projekt",
+			"Properties" : [
+				{
+					"Name": "ProjectMappings",
+					"FriendlyName": "Abbildung von Feldern in Projekten",
+					"Explanation" : "Abbildung von einfachen Textwerten, Feldern aus Enable Now und Funktionen auf Felder in iFinder. Die Konfiguration betrifft nur Projekte."
+				}
+			]
+		}
+	],
+
+	"Buchseite" : [		
+		{
+			"FriendlyName" : "Buchseite",
+			"Properties" : [
+				{
+					"Name": "SlideMappings",
+					"FriendlyName": "Abbildung von Feldern in Buchseiten",
+					"Explanation" : "Abbildung von einfachen Textwerten, Feldern aus Enable Now und Funktionen auf Felder in iFinder. Die Konfiguration betrifft nur Buchseiten."
+				}
+			]
+		}
+	],
+
+	"Gruppe" : [		
+		{
+			"FriendlyName" : "Gruppe",
+			"Properties" : [
+				{
+					"Name": "GroupMappings",
+					"FriendlyName": "Abbildung von Feldern in Gruppen",
+					"Explanation" : "Abbildung von einfachen Textwerten, Feldern aus Enable Now und Funktionen auf Felder in iFinder. Die Konfiguration betrifft nur Gruppen."
+				}
+			]
+		}
+	],
+
+	"Buch" : [		
+		{
+			"FriendlyName" : "Buch",
+			"Properties" : [
+				{
+					"Name": "BookMappings",
+					"FriendlyName": "Abbildung von Feldern in Büchern",
+					"Explanation" : "Abbildung von einfachen Textwerten, Feldern aus Enable Now und Funktionen auf Felder in iFinder. Die Konfiguration betrifft nur Büchern."
+				}
+			]
+		}
+	],
+
+	"Textseite" : [		
+		{
+			"FriendlyName" : "Textseite",
+			"Properties" : [
+				{
+					"Name": "TextMappings",
+					"FriendlyName": "Abbildung von Feldern in Textseiten",
+					"Explanation" : "Abbildung von einfachen Textwerten, Feldern aus Enable Now und Funktionen auf Felder in iFinder. Die Konfiguration betrifft nur Textseiten."
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,45 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <FontFamily x:Key="FontAwesome">pack://application:,,,/src/resources/#Font Awesome 5 Free Solid</FontFamily>
+    
+    <SolidColorBrush x:Key="DarkBackgroundColor"
+                     Color="#1e1e1e" />
+    <SolidColorBrush x:Key="MediumBackgroundColor"
+                     Color="#252526" />
+    <SolidColorBrush x:Key="LightBackgroundColor"
+                     Color="#333"/>
+    <SolidColorBrush x:Key="TitleBackgroundColor"
+                     Color="#3c3c3c" />
+    
+
+    <SolidColorBrush x:Key="AccentColor"
+                     Color="#007acc" />
+    <SolidColorBrush x:Key="LightAccentColor"
+                     Color="#58b5f2" />
+    
+    <SolidColorBrush x:Key="ForegroundColor"
+                     Color="#FFF0EFF1" />
+    <SolidColorBrush x:Key="MediumForegroundColor"
+                     Color="#cccccc" />
+    <SolidColorBrush x:Key="DarkForegroundColor"
+                     Color="#1e1e1e" />
+    
+    <SolidColorBrush x:Key="LightHoverBackgroundColor"
+                     Color="#505050" />
+    <SolidColorBrush x:Key="RedHoverBackgroundColor"
+                     Color="#d71526" />
+
+    <SolidColorBrush x:Key="SuccessPrimaryColor"
+                     Color="#FF339933" />
+    <SolidColorBrush x:Key="FailurePrimaryColor"
+                     Color="#FFE51400" />
+    <SolidColorBrush x:Key="FailureSecondaryColor"
+                     Color="#FFA1260D" />
+
+
+    <SolidColorBrush x:Key="SeparatorColor"
+                     Color="#555" />
+    <SolidColorBrush x:Key="LightSeparatorColor"
+                     Color="#999" />
+</ResourceDictionary>

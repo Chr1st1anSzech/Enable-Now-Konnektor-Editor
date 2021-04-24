@@ -1,13 +1,12 @@
 ﻿using Enable_Now_Konnektor_Bibliothek.src.misc;
 using Enable_Now_Konnektor_Editor.src.controls;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
-using System.Linq;
 using System.Windows.Controls;
 using Enable_Now_Konnektor_Editor.src.helper;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
 
 namespace Enable_Now_Konnektor_Editor.src.pages
 {
@@ -91,7 +90,7 @@ namespace Enable_Now_Konnektor_Editor.src.pages
                         {
                             if ("String[]".Equals(propertyType))
                             {
-                                var items = listControl.ItemsListbox.Items;
+                                ItemCollection items = listControl.ItemsListbox.Items;
                                 string[] val = new string[items.Count];
                                 for (int i = 0; i < items.Count; i++)
                                 {
@@ -105,8 +104,8 @@ namespace Enable_Now_Konnektor_Editor.src.pages
                         {
                             if ("Dictionary`2".Equals(propertyType))
                             {
-                                var items = dictControl.ItemsListbox.Items;
-                                Dictionary<string, string[]> val = new Dictionary<string, string[]>(items.Count);
+                                ItemCollection items = dictControl.ItemsListbox.Items;
+                                Dictionary<string, string[]> val = new(items.Count);
                                 for (int i = 0; i < items.Count; i++)
                                 {
                                     PairValue pair = items[i] as PairValue;

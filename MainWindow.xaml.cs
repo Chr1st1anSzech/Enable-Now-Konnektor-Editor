@@ -293,7 +293,7 @@ namespace Enable_Now_Konnektor_Editor
                 {
                     JobConfig jobConfig = MyJobManager.GetJobConfig(selectedItem.Header);
                     MyJobManager.SelectedJobConfig = jobConfig;
-                    ShowJobSettingButtons(jobConfig != null);
+                    SwitchJobButtonsVisibility(jobConfig != null);
                 }
             }
         }
@@ -311,7 +311,7 @@ namespace Enable_Now_Konnektor_Editor
             {
                 Page page = new SettingsPage(_konnektorPageName, MyConfigManager.ConnectorConfig, new ConfigWriter());
                 OpenPage(_konnektorPageName, page);
-                ShowJobSettingButtons(false);
+                SwitchJobButtonsVisibility(false);
             }
         }
 
@@ -357,7 +357,7 @@ namespace Enable_Now_Konnektor_Editor
 
             MyJobManager.SelectedJobConfig = jobConfig;
             MyJobManager.AddRecentJob(jobConfig);
-            ShowJobSettingButtons(true);
+            SwitchJobButtonsVisibility(true);
 
             if (!MyJobManager.IsJobOpened(jobConfig))
             {
@@ -378,9 +378,10 @@ namespace Enable_Now_Konnektor_Editor
 
 
         /// <summary>
-        /// 
+        /// Zeigt oder versteckt die Navigations-Schaltflächen, die zur Job-Konfiguration gehören.
         /// </summary>
-        private void ShowJobSettingButtons(bool visible)
+        /// <param name="visible">Wahr, wenn die Schaltflächen angezeigt werden sollen.</param>
+        private void SwitchJobButtonsVisibility(bool visible)
         {
             foreach (ToggleButton button in _jobPageButtons)
             {
@@ -399,7 +400,7 @@ namespace Enable_Now_Konnektor_Editor
 
 
         /// <summary>
-        /// 
+        /// Schließt den entsprechenden Tab.
         /// </summary>
         /// <param name="item"></param>
         private void CloseTab(FrameTabItem item)
@@ -411,9 +412,9 @@ namespace Enable_Now_Konnektor_Editor
 
 
         /// <summary>
-        /// 
+        /// Hebt die zugehörige Navigations-Schaltfläche der geöffneten Seite hervor.
         /// </summary>
-        /// <param name="pageName"></param>
+        /// <param name="pageName">Der Name der Seite, deren Navigations-Schaltfläche hervorgehoben werden soll.</param>
         private void HighlightNavigationButton(string pageName)
         {
             if (_checkedToggleButton != null)
@@ -434,22 +435,25 @@ namespace Enable_Now_Konnektor_Editor
 
 
         /// <summary>
-        /// 
+        /// Öffnet die Startseite.
         /// </summary>
         private void OpenStartPage()
         {
             Page page = new StartPage(OpenJob);
             OpenPage(_startPageName, page);
-            ShowJobSettingButtons(false);
+            SwitchJobButtonsVisibility(false);
         }
 
 
 
         /// <summary>
-        /// 
+        ///         /// Öffnet oder erstellt einen Tab mit entsprechenden Namen. Navigiert das Frame zur Seite und hebt
+        /// die zugehörige Navigations-Schaltfläche hervor.
         /// </summary>
+        /// <param name="tabName">Der Name des zu öffnenden oder zu erstellenden Tabs.</param>
+        /// <param name="page">Die Seite, die geöffnet werden soll.</param>
         /// <param name="pageName"></param>
-        /// <param name="page"></param>
+        /// <returns>Der geöffnete Tab.</returns>
         private FrameTabItem OpenPage(string tabName, Page page, string pageName = null)
         {
             if (pageName == null) pageName = tabName;

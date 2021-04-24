@@ -1,21 +1,13 @@
-﻿using Enable_Now_Konnektor_Bibliothek.src.config;
-using Enable_Now_Konnektor_Bibliothek.src.jobs;
-using Enable_Now_Konnektor_Editor.src.helper;
-using Enable_Now_Konnektor_Editor.src.pages;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Enable_Now_Konnektor_Editor.src.frames
 {
     internal class FrameManager
     {
-        private protected static FrameManager Manager;
-        private readonly TabControl tabControl;
+        private protected static FrameManager s_manager;
+        private readonly TabControl _tabControl;
 
         public FrameTabItem ActiveTab { get; set; }
         public ObservableCollection<FrameTabItem> FrameTabItems { get; } = new();
@@ -27,28 +19,28 @@ namespace Enable_Now_Konnektor_Editor.src.frames
         /// </summary>
         private protected FrameManager(TabControl control) : base()
         {
-            tabControl = control;
+            _tabControl = control;
         }
 
 
 
         /// <summary>
-        /// 
+        /// Gibt das FrameManager-Objekt zurück.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Das FrameManager-Objekt.</returns>
         public static FrameManager GetFrameManager(TabControl control)
         {
-            Manager ??= new FrameManager(control);
-            return Manager;
+            s_manager ??= new FrameManager(control);
+            return s_manager;
         }
 
 
 
         /// <summary>
-        /// 
+        /// Erstellt einen neuen Tab mit dem übergebenen Namen.
         /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
+        /// <param name="header">Der Name des Tabs.</param>
+        /// <returns>Das neu erstellte FrameTabItem-Objekt.</returns>
         public FrameTabItem OpenNewTab(string header)
         {
             if (string.IsNullOrWhiteSpace(header)) return null;
@@ -66,24 +58,24 @@ namespace Enable_Now_Konnektor_Editor.src.frames
 
 
         /// <summary>
-        /// 
+        /// Erstellt und öffnet einen neuen Tab mit dem übergebenen Namen.
         /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
+        /// <param name="header">Der Name des Tabs.</param>
+        /// <returns>Das neu geöffnete FrameTabItem-Objekt.</returns>
         public FrameTabItem OpenAndSelectNewTab(string header)
         {
             FrameTabItem item = OpenNewTab(header);
-            tabControl.SelectedItem = item;
+            _tabControl.SelectedItem = item;
             return item;
         }
 
 
 
         /// <summary>
-        /// 
+        /// Gibt den Tab mit dem Namen zurück.
         /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
+        /// <param name="header">Der Name des betreffenden Tabs.</param>
+        /// <returns>Das FrameTabItem-Objekt mit dem übergebenen Namen.</returns>
         public FrameTabItem GetTabItem(string header)
         {
             if (string.IsNullOrWhiteSpace(header)) return null;
@@ -94,10 +86,9 @@ namespace Enable_Now_Konnektor_Editor.src.frames
 
 
         /// <summary>
-        /// 
+        /// Navigert das Frame des aktuellen Tabs zu einer Seite.
         /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
+        /// <param name="page">Das Page-Objekt, zu dem das Frame navigieren soll.</param>
         public void NavigateTabToPage(Page page)
         {
             ActiveTab.Content.Navigate(page);
@@ -106,10 +97,10 @@ namespace Enable_Now_Konnektor_Editor.src.frames
 
 
         /// <summary>
-        /// 
+        /// Navigert das Frame des Tabs zu einer Seite.
         /// </summary>
-        /// <param name="tabName"></param>
-        /// <returns></returns>
+        /// <param name="tabName">Der Name des betreffenden Tabs.</param>
+        /// <param name="page">Das Page-Objekt, zu dem das Frame navigieren soll.</param>
         public void NavigateTabToPage(string tabName, Page page)
         {
             GetTabItem(tabName).Content.Navigate(page);
@@ -118,24 +109,22 @@ namespace Enable_Now_Konnektor_Editor.src.frames
 
 
         /// <summary>
-        /// 
+        /// Wechselt zu den Tab mit dem übergebenen Header.
         /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
+        /// <param name="header">Der Name des zu öffnenden Tabs.</param>
         public void SwitchToTab(string header)
         {
             if (string.IsNullOrWhiteSpace(header)) return;
 
-            tabControl.SelectedItem = FrameTabItems.FirstOrDefault(item => header.Equals(item.Header));
+            _tabControl.SelectedItem = FrameTabItems.FirstOrDefault(item => header.Equals(item.Header));
         }
 
 
 
         /// <summary>
-        /// 
+        /// Schließt den Tab mit dem übergebenen Header.
         /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
+        /// <param name="header">Der Name des zu schließenden Tabs</param>
         public void CloseTab(string header)
         {
             if (string.IsNullOrWhiteSpace(header)) return;
@@ -147,10 +136,9 @@ namespace Enable_Now_Konnektor_Editor.src.frames
 
 
         /// <summary>
-        /// 
+        /// Schließt den übergebenen Tab.
         /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
+        /// <param name="item"></param>
         public void CloseTab(FrameTabItem item)
         {
             if (item == null) return;
@@ -161,9 +149,8 @@ namespace Enable_Now_Konnektor_Editor.src.frames
 
 
         /// <summary>
-        /// 
+        /// Den letzten Tab ermitteln.
         /// </summary>
-        /// <param name="header"></param>
         /// <returns></returns>
         public FrameTabItem GetLastTab()
         {

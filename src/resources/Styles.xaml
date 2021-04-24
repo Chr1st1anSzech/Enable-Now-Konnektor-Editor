@@ -633,11 +633,11 @@
                                        VerticalAlignment="Center"
                                        Foreground="{StaticResource AccentColor}" />
                             <TextBlock Grid.Column="1"
-                                       Text="{Binding Path=Id}"
+                                       Text="{Binding}"
                                        FontSize="16"
                                        VerticalAlignment="Center"
                                        TextTrimming="CharacterEllipsis"
-                                       ToolTip="{Binding Path=Id}" />
+                                       ToolTip="{Binding}" />
                         </Grid>
                     </DataTemplate>
                 </Setter.Value>

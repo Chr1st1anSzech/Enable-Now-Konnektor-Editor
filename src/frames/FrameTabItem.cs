@@ -10,13 +10,15 @@ namespace Enable_Now_Konnektor_Editor.src.frames
     public class FrameTabItem
     {
         public string Header { get; }
+        public bool IsJobPage { get; set; }
         public string SelectedPage { get; set; } = "Allgemein";
         public Frame Content { get; }
 
-        public FrameTabItem(string header, Frame frame)
+        public FrameTabItem(string header, Frame frame, bool isJobPage = false)
         {
             Header = header;
             Content = frame;
+            IsJobPage = isJobPage;
         }
 
         public override bool Equals(object obj)

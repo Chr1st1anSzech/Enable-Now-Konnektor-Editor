@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -7,6 +7,12 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>Enable Now Konnektor Editor</AssemblyName>
     <ApplicationIcon>enable-now-konnektor.ico</ApplicationIcon>
+    <Authors>Christian Szech</Authors>
+    <Company>Christian Szech</Company>
+    <PackageProjectUrl>https://github.com/Chr1st1anSzech/Enable-Now-Konnektor-Editor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Chr1st1anSzech/Enable-Now-Konnektor-Editor</RepositoryUrl>
+    <PackageId>EnableNowKonnektor.Editor</PackageId>
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=X:\</PathMap>
   </PropertyGroup>
 
   <ItemGroup>

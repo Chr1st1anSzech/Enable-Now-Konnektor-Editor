@@ -12,25 +12,28 @@ namespace Enable_Now_Konnektor_Editor.src.pages
     /// </summary>
     public partial class StartPage : Page
     {
-        public ExtJobManager MyJobManager { get; }
+        private readonly Action<JobConfig> _openJob;
 
-        private Action<JobConfig> OpenJob;
+        public ExtJobManager MyJobManager { get; }
 
         public StartPage(Action<JobConfig> OpenJob)
         {
             InitializeComponent();
             MyJobManager = ExtJobManager.GetJobManager();
             InitDataBindings();
-            this.OpenJob = OpenJob;
+            _openJob = OpenJob;
             SearchField.Callback = FilterRecentJobs;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void InitDataBindings()
         {
             Binding jobListBinding = new()
             {
                 Source = MyJobManager,
-                Path = new PropertyPath(nameof(MyJobManager.RecentJobs)),
+                Path = new PropertyPath(nameof(MyJobManager.RecentJobIds)),
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
             BindingOperations.SetBinding(RecentJobsListView, ItemsControl.ItemsSourceProperty, jobListBinding);
@@ -44,23 +47,38 @@ namespace Enable_Now_Konnektor_Editor.src.pages
             BindingOperations.SetBinding(SearchField.SearchTextbox, TextBox.TextProperty, filterBinding);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RecentJobsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if( sender is ListView recentJobsListView && 
-                recentJobsListView.SelectedItem is JobConfig jobConfig)
+            if (sender is ListView recentJobsListView &&
+                recentJobsListView.SelectedItem is string jobId)
             {
-                OpenJob(jobConfig);
+                JobConfig jobConfig = MyJobManager.GetJobConfig(jobId);
+                _openJob(jobConfig);
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
         private void FilterRecentJobs(string filter)
         {
             MyJobManager.RecentJobsFilter = filter;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            NewJobWindow window = new(OpenJob);
+            NewJobWindow window = new(_openJob);
             window.ShowDialog();
         }
     }

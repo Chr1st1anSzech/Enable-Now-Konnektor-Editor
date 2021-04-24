@@ -16,252 +16,237 @@ namespace Enable_Now_Konnektor_Editor.src.pages
 {
     class PageCreator
     {
-        private readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly string propertiesFilePath = Path.Combine(Util.GetApplicationRoot(), "properties.json");
-        private static JObject Properties { get; set; }
+        private static readonly ILog s_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static JObject s_properties;
+        private readonly string _propertiesFilePath = Path.Combine(Util.GetApplicationRoot(), "properties.json");
+        private readonly Grid _contentGrid;
+        private readonly object _data;
+        private readonly Type _dataType;
 
-        private object data;
-        private Grid contentGrid;
-        private Type dataType;
-
-        internal void CreatePage(SettingsPage page, string category, object data)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="data"></param>
+        public PageCreator(Grid grid, object data)
         {
-            this.data = data;
+            _contentGrid = grid;
+            _data = data;
             if (data != null)
             {
-                dataType = data.GetType();
+                _dataType = data.GetType();
             }
-            contentGrid = page.ContentGrid;
-            CreateContent(category);
         }
 
-        private void CreateContent(string category)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="categoryName"></param>
+        internal void CreatePage(string categoryName)
         {
-
             JObject json = ReadProps();
-            JToken config = json?[category];
-            if( config == null) { return; }
+            JToken config = json?[categoryName];
+            if (config == null) { return; }
 
             List<JToken> subcategories = config.Children().ToList();
             int subcategoriesCount = subcategories.Count;
-            int rowIndex = 0;
+            int contentGridRow = 0;
             bool isFirstHeader = true;
             for (int categoryIndex = 0; categoryIndex < subcategoriesCount; categoryIndex++)
             {
-                var subcategory = subcategories[categoryIndex];
-                string subcategoryName = subcategory["FriendlyName"].Value<string>();
-                AddSubcategoryHeader(subcategoryName, ref rowIndex, isFirstHeader);
+                CreateCategoryContent(subcategories[categoryIndex], ref contentGridRow, isFirstHeader);
                 isFirstHeader = false;
-                List<JToken> properties = subcategory["Properties"].Children().ToList();
-                int propertiesCount = properties.Count;                
-
-                for (int propertyIndex = 0; propertyIndex < propertiesCount; propertyIndex++)
-                {
-                    JToken propertyToken = properties[propertyIndex];
-                    AddControl(propertyToken, ref rowIndex);
-                }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subcategory"></param>
+        /// <param name="contentGridRow"></param>
+        /// <param name="isFirstHeader"></param>
+        private void CreateCategoryContent(JToken subcategory, ref int contentGridRow, bool isFirstHeader)
+        {
+            string subcategoryName = subcategory["FriendlyName"].Value<string>();
+            AddSubcategoryHeader(subcategoryName, ref contentGridRow, isFirstHeader);
+            List<JToken> properties = subcategory["Properties"].Children().ToList();
+            int propertiesCount = properties.Count;
+
+            for (int propertyIndex = 0; propertyIndex < propertiesCount; propertyIndex++)
+            {
+                AddControl(properties[propertyIndex], ref contentGridRow);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="rowIndex"></param>
+        /// <param name="isFirstHeader"></param>
         private void AddSubcategoryHeader(string categoryName, ref int rowIndex, bool isFirstHeader)
         {
-            contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            TextBlock header = new TextBlock()
+            _contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            TextBlock header = new()
             {
                 Text = categoryName,
                 Style = Application.Current.Resources["HeaderTextblockStyle"] as Style
             };
-            if( isFirstHeader)
+            if (isFirstHeader)
             {
-                var margin = header.Margin;
+                Thickness margin = header.Margin;
                 margin.Top = 0d;
                 header.Margin = margin;
             }
             Grid.SetColumnSpan(header, 2);
             Grid.SetRow(header, rowIndex);
-            contentGrid.Children.Add(header);
+            _contentGrid.Children.Add(header);
             rowIndex++;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="propertyToken"></param>
+        /// <param name="rowIndex"></param>
         private void AddControl(JToken propertyToken, ref int rowIndex)
         {
-            string friendlyName = propertyToken["FriendlyName"]?.Value<string>() ?? "";
-            string explanationText = propertyToken["Explanation"]?.Value<string>();
-            FrameworkElement control = CreateControl(propertyToken);
-            if( control == null)
+            FrameworkElement control = new ControlFactory().CreateControl(propertyToken, _data);
+            if (control == null)
             {
                 return;
             }
-            else if( control is ListControl || control is DictionaryControl)
+
+            string controlLabel = propertyToken["FriendlyName"]?.Value<string>() ?? "";
+            string controlExplanation = propertyToken["Explanation"]?.Value<string>();
+            if (control is ListControl || control is DictionaryControl)
             {
-                AddTwoRowControl(control, friendlyName, explanationText, ref rowIndex);
+                AddTwoRowControl(control, controlLabel, controlExplanation, ref rowIndex);
             }
             else
             {
-                AddOneRowControl(control, friendlyName, explanationText, ref rowIndex);
+                AddOneRowControl(control, controlLabel, controlExplanation, ref rowIndex);
             }
         }
 
-        private void AddOneRowControl(FrameworkElement control, string friendlyName, string explanationText, ref int rowIndex)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="controlLabel"></param>
+        /// <param name="controlExplanation"></param>
+        /// <param name="contentGridRow"></param>
+        private void AddOneRowControl(FrameworkElement control, string controlLabel, string controlExplanation, ref int contentGridRow)
         {
-            contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            _contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
-            CreateTitleLabel(friendlyName, ref rowIndex);
+            CreateTitleLabel(controlLabel, ref contentGridRow);
 
-            if(control!= null)
+            if (!string.IsNullOrWhiteSpace(controlExplanation))
             {
-                Grid.SetRow(control, rowIndex);
-                Grid.SetColumn(control, 1);
-                contentGrid.Children.Add(control);
-            }
-
-            if( !string.IsNullOrWhiteSpace(explanationText) )
-            {
-                CreateExplanationLabel(explanationText, ref rowIndex);
-            }
-
-            rowIndex++;
-        }
-
-        private void AddTwoRowControl(FrameworkElement control, string friendlyName, string explanationText, ref int rowIndex)
-        {
-            contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-
-            CreateTitleLabel(friendlyName, ref rowIndex, 2);
-
-            if (!string.IsNullOrWhiteSpace(explanationText))
-            {
-                CreateExplanationLabel(explanationText, ref rowIndex, 2 );
+                CreateExplanationLabel(controlExplanation, ref contentGridRow);
             }
 
             if (control != null)
             {
-                contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                rowIndex++;
-                Grid.SetRow(control, rowIndex);
-                Grid.SetColumn(control, 0);
-                Grid.SetColumnSpan(control, 2);
-                contentGrid.Children.Add(control);
+                Grid.SetRow(control, contentGridRow);
+                Grid.SetColumn(control, 1);
+                _contentGrid.Children.Add(control);
             }
-            rowIndex++;
+
+
+            contentGridRow++;
         }
 
-        private void CreateTitleLabel(string friendlyName, ref int rowIndex, int columnspan = 1)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="controlLabel"></param>
+        /// <param name="controlExplanation"></param>
+        /// <param name="contentGridRow"></param>
+        private void AddTwoRowControl(FrameworkElement control, string controlLabel, string controlExplanation, ref int contentGridRow)
         {
-            TextBlock label = new TextBlock()
+            _contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+
+            CreateTitleLabel(controlLabel, ref contentGridRow, 2);
+
+            if (!string.IsNullOrWhiteSpace(controlExplanation))
             {
-                Text = $"{friendlyName}:",
+                CreateExplanationLabel(controlExplanation, ref contentGridRow, 2);
+            }
+
+            if (control != null)
+            {
+                _contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                contentGridRow++;
+                AddControlToGrid(contentGridRow, 0, 2, control);
+            }
+            contentGridRow++;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controlLabel"></param>
+        /// <param name="contentGridRow"></param>
+        /// <param name="contentGridColumnspan"></param>
+        private void CreateTitleLabel(string controlLabel, ref int contentGridRow, int contentGridColumnspan = 1)
+        {
+            TextBlock label = new()
+            {
+                Text = $"{controlLabel}:",
                 Style = Application.Current.Resources["PropertiesTextBlockStyle"] as Style
             };
-            Grid.SetRow(label, rowIndex);
-            Grid.SetColumn(label, 0);
-            Grid.SetColumnSpan(label, columnspan);
-            contentGrid.Children.Add(label);
+
+            AddControlToGrid(contentGridRow, 0, contentGridColumnspan, label);
         }
 
-        private void CreateExplanationLabel(string explanationText, ref int rowIndex, int columnspan = 1)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controlExplanation"></param>
+        /// <param name="contentGridRow"></param>
+        /// <param name="contentGridColumnspan"></param>
+        private void CreateExplanationLabel(string controlExplanation, ref int contentGridRow, int contentGridColumnspan = 1)
         {
-            TextBlock label = new TextBlock()
+            TextBlock label = new()
             {
-                Text = explanationText,
+                Text = controlExplanation,
                 Style = Application.Current.Resources["PropertiesExplanationTextblockStyle"] as Style
             };
-            contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            rowIndex++;
-            Grid.SetRow(label, rowIndex);
-            Grid.SetColumn(label, 0);
-            Grid.SetColumnSpan(label, columnspan);
-            contentGrid.Children.Add(label);
+
+            _contentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            contentGridRow++;
+            AddControlToGrid(contentGridRow, 0, contentGridColumnspan, label);
         }
 
-        private FrameworkElement CreateControl(JToken property)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contentGridRow"></param>
+        /// <param name="contentGridColumn"></param>
+        /// <param name="contentGridColumnspan"></param>
+        /// <param name="control"></param>
+        private void AddControlToGrid(int contentGridRow, int contentGridColumn, int contentGridColumnspan, UIElement control)
         {
-            string name = property["Name"]?.Value<string>();
-            string regex = property["Validate"]?.Value<string>();
-            bool? isReadonly = property["Readonly"]?.Value<bool>();
-            FrameworkElement control = null;
-            var value = dataType.GetProperty(name).GetValue(data);
-
-
-            if (value is string stringValue)
-            {
-                TextBox textBox = new TextBox()
-                {
-                    Style = Application.Current.Resources["PropertiesTextboxStyle"] as Style,
-                    Tag = new ControlTag(name, regex),
-                    IsReadOnly = isReadonly ?? false,
-                    Text = stringValue ?? ""
-                };
-                control = textBox;
-
-            }
-            else if (value is bool boolValue)
-            {
-                CheckBox checkbox = new CheckBox() {
-                    Style = Application.Current.Resources["BaseCheckboxStyle"] as Style,
-                    Tag = new ControlTag(name, regex),
-                    IsEnabled = isReadonly ?? true,
-                    IsChecked = boolValue
-                };
-                control = checkbox;
-            }
-            else if (value is int inValue)
-            {
-                TextBox textBox = new TextBox()
-                {
-                    Style = Application.Current.Resources["PropertiesIntTextboxStyle"] as Style,
-                    Tag = new ControlTag(name, regex),
-                    IsReadOnly = isReadonly ?? false,
-                    Text = inValue.ToString()
-                };
-                control = textBox;
-            }
-            else if (value is string[] stringArray)
-            {
-                ListControl list = new ListControl()
-                {
-                    Tag = new ControlTag(name, regex)
-                };
-                foreach (string item in stringArray)
-                {
-                    list.AddItem(item);
-                }
-                control = list;
-            }
-            else if (value is Dictionary<string,string> stringDictionary)
-            {
-                DictionaryControl dictControl = new DictionaryControl()
-                {
-                    Tag = new ControlTag(name, regex)
-                };
-                foreach (KeyValuePair<string,string> item in stringDictionary)
-                {
-                    dictControl.AddItem(item.Key, item.Value);
-                }
-                control = dictControl;
-            }
-            else if (value is Dictionary<string, string[]> stringArrayDictionary)
-            {
-                DictionaryControl dictControl = new DictionaryControl()
-                {
-                    Tag = new ControlTag(name, regex)
-                };
-                foreach (KeyValuePair<string, string[]> item in stringArrayDictionary)
-                {
-                    dictControl.AddItem(item.Key, string.Join(';',item.Value) );
-                }
-                control = dictControl;
-            }
-            return control;
+            Grid.SetRow(control, contentGridRow);
+            Grid.SetColumn(control, contentGridColumn);
+            Grid.SetColumnSpan(control, contentGridColumnspan);
+            _contentGrid.Children.Add(control);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private JObject ReadProps()
         {
-            if( Properties != null) { return Properties; }
+            if (s_properties != null) { return s_properties; }
             try
             {
-                string jsonString = File.ReadAllText(propertiesFilePath);
-                return  Properties = JsonConvert.DeserializeObject<JObject>(jsonString) ;
+                string jsonString = File.ReadAllText(_propertiesFilePath);
+                return s_properties = JsonConvert.DeserializeObject<JObject>(jsonString);
             }
             catch
             {

@@ -16,25 +16,25 @@ namespace Enable_Now_Konnektor_Editor.src.pages
     /// </summary>
     public partial class SettingsPage : Page
     {
-        private readonly IJsonWriter writer;
-        private readonly object data;
+        private readonly IJsonWriter _writer;
+        private readonly object _data;
 
         public SettingsPage(string siteName, object data, IJsonWriter writer)
         {
             InitializeComponent();
-            new PageCreator().CreatePage(this, siteName, data);
-            this.data = data;
-            this.writer = writer;
+            new PageCreator(ContentGrid, data).CreatePage(siteName);
+            _data = data;
+            _writer = writer;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (data == null) { return; }
+            if (_data == null) { return; }
             bool isDataValide = true;
 
             try
             {
-                Type t = data.GetType();
+                Type t = _data.GetType();
                 foreach (FrameworkElement control in ContentGrid.Children)
                 {
                     if (control.Tag is ControlTag tag)
@@ -54,7 +54,7 @@ namespace Enable_Now_Konnektor_Editor.src.pages
                                     textbox.Style = Application.Current.Resources["PropertiesIntTextboxStyle"] as Style;
                                     if (int.TryParse(text, out int val))
                                     {
-                                        prop.SetValue(data, val);
+                                        prop.SetValue(_data, val);
                                     }
                                 }
                                 else
@@ -68,7 +68,7 @@ namespace Enable_Now_Konnektor_Editor.src.pages
                                 if (Regex.IsMatch(text, regexValue))
                                 {
                                     textbox.Style = Application.Current.Resources["PropertiesTextboxStyle"] as Style;
-                                    prop.SetValue(data, text);
+                                    prop.SetValue(_data, text);
                                 }
                                 else
                                 {
@@ -84,7 +84,7 @@ namespace Enable_Now_Konnektor_Editor.src.pages
                             if ("Boolean".Equals(propertyType))
                             {
                                 bool? val = checkbox.IsChecked;
-                                prop.SetValue(data, val);
+                                prop.SetValue(_data, val);
                             }
                         }
                         else if (control is ListControl listControl)
@@ -98,7 +98,7 @@ namespace Enable_Now_Konnektor_Editor.src.pages
                                     val[i] = items.GetItemAt(i).ToString();
                                 }
 
-                                prop.SetValue(data, val);
+                                prop.SetValue(_data, val);
                             }
                         }
                         else if (control is DictionaryControl dictControl)
@@ -113,15 +113,15 @@ namespace Enable_Now_Konnektor_Editor.src.pages
                                     string[] itemValue = pair.Value.Split(';');
                                     val.Add(pair.Key, itemValue);
                                 }
-                                
-                                prop.SetValue(data, val);
+
+                                prop.SetValue(_data, val);
                             }
                         }
                     }
                 }
                 if (isDataValide)
                 {
-                    writer.Write(data);
+                    _writer.Write(_data);
                     SaveStatusTextBlock.Style = Application.Current.Resources["SaveSuccessTextBlock"] as Style;
                 }
                 else

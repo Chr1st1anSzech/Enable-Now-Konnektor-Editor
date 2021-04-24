@@ -19,25 +19,24 @@ namespace Enable_Now_Konnektor_Editor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        public ExtJobManager MyJobManager { get; }
-        public ConfigManager MyConfigManager { get; }
-        internal FrameManager MyFrameManager { get; }
-
-        private bool jobExplorerExpanded = false;
-        private ToggleButton checkedToggleButton;
-
-        private readonly string startPageName = "Startseite";
-        private readonly string konnektorPageName = "Konnektor";
-        private string settingsStartPage;
         private struct JobPageButtonTemplate
         {
             public string Content { get; set; }
             public string Icon { get; set; }
         }
-        private ToggleButton[] jobPageButtons;
 
+        private static readonly ILog s_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly string _startPageName = "Startseite";
+        private readonly string _konnektorPageName = "Konnektor";
+
+        private bool _jobExplorerExpanded = false;
+        private string _settingsStartPage;
+        private ToggleButton _checkedToggleButton;
+        private ToggleButton[] _jobPageButtons;
+
+        public ExtJobManager MyJobManager { get; }
+        public ConfigManager MyConfigManager { get; }
+        internal FrameManager MyFrameManager { get; }
 
 
         /// <summary>
@@ -139,19 +138,19 @@ namespace Enable_Now_Konnektor_Editor
                 new JobPageButtonTemplate(){ Content = "Buchseite", Icon="\uf518"},
                 new JobPageButtonTemplate(){ Content = "Textseite", Icon="\uf15c"}
             };
-            settingsStartPage = jobPageButtonTemplates[0].Content;
-            jobPageButtons = new ToggleButton[jobPageButtonTemplates.Length];
+            _settingsStartPage = jobPageButtonTemplates[0].Content;
+            _jobPageButtons = new ToggleButton[jobPageButtonTemplates.Length];
             int i = 0;
             foreach (JobPageButtonTemplate buttonTemplate in jobPageButtonTemplates)
             {
-                ToggleButton button = new ToggleButton()
+                ToggleButton button = new()
                 {
                     Tag = buttonTemplate.Icon,
                     Content = buttonTemplate.Content,
                     Visibility = Visibility.Hidden,
                     Style = Application.Current.Resources["BaseToggleButtonStyle"] as Style
                 };
-                jobPageButtons[i] = button;
+                _jobPageButtons[i] = button;
                 button.Click += NavButton_Click;
                 NavigationPanel.Children.Add(button);
                 i++;
@@ -163,7 +162,7 @@ namespace Enable_Now_Konnektor_Editor
             Binding jobListBinding = new()
             {
                 Source = MyJobManager,
-                Path = new PropertyPath("AllJobs"),
+                Path = new PropertyPath("JobIds"),
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
             BindingOperations.SetBinding(JobListView, ItemsControl.ItemsSourceProperty, jobListBinding);
@@ -201,7 +200,8 @@ namespace Enable_Now_Konnektor_Editor
                 JobConfig jobConfig = MyJobManager.SelectedJobConfig;
                 string path = MyJobManager.GetJobConfigPath(jobConfig);
                 Page page = new SettingsPage(pageName, jobConfig, new JobWriter(path));
-                OpenPage(jobConfig.Id, page, pageName);
+                FrameTabItem item = OpenPage(jobConfig.Id, page, pageName);
+                item.IsJobPage = true;
             }
         }
 
@@ -214,8 +214,8 @@ namespace Enable_Now_Konnektor_Editor
 
         private void SwitchJobbExplorerExpanded()
         {
-            JobExplorerBorder.Visibility = jobExplorerExpanded ? Visibility.Collapsed : Visibility.Visible;
-            jobExplorerExpanded = !jobExplorerExpanded;
+            JobExplorerBorder.Visibility = _jobExplorerExpanded ? Visibility.Collapsed : Visibility.Visible;
+            _jobExplorerExpanded = !_jobExplorerExpanded;
         }
 
         #endregion
@@ -243,7 +243,8 @@ namespace Enable_Now_Konnektor_Editor
         {
             if (sender is ListView jobListView)
             {
-                JobConfig jobConfig = jobListView.SelectedItem as JobConfig;
+                string jobId = jobListView.SelectedItem as string;
+                JobConfig jobConfig = MyJobManager.GetJobConfig(jobId);
                 OpenJob(jobConfig);
             }
         }
@@ -288,9 +289,12 @@ namespace Enable_Now_Konnektor_Editor
             {
                 MyFrameManager.ActiveTab = selectedItem;
                 HighlightNavigationButton(MyFrameManager.ActiveTab.SelectedPage);
-                JobConfig jobConfig = MyJobManager.GetJobConfig(selectedItem.Header);
-                MyJobManager.SelectedJobConfig = jobConfig;
-                ShowJobSettingButtons(jobConfig != null);
+                if( selectedItem.IsJobPage)
+                {
+                    JobConfig jobConfig = MyJobManager.GetJobConfig(selectedItem.Header);
+                    MyJobManager.SelectedJobConfig = jobConfig;
+                    ShowJobSettingButtons(jobConfig != null);
+                }
             }
         }
 
@@ -303,10 +307,10 @@ namespace Enable_Now_Konnektor_Editor
         /// <param name="e"></param>
         private void KonnektorPageButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is ToggleButton startPageButton)
+            if (sender is ToggleButton)
             {
-                Page page = new SettingsPage(konnektorPageName, MyConfigManager.ConnectorConfig, new ConfigWriter(ConfigIO.FilePath));
-                OpenPage(konnektorPageName, page);
+                Page page = new SettingsPage(_konnektorPageName, MyConfigManager.ConnectorConfig, new ConfigWriter());
+                OpenPage(_konnektorPageName, page);
                 ShowJobSettingButtons(false);
             }
         }
@@ -361,10 +365,11 @@ namespace Enable_Now_Konnektor_Editor
             }
 
             string path = MyJobManager.GetJobConfigPath(jobConfig);
-            Page page = new SettingsPage(settingsStartPage, jobConfig, new JobWriter(path));
-            OpenPage(jobConfig.Id, page, settingsStartPage);
+            Page page = new SettingsPage(_settingsStartPage, jobConfig, new JobWriter(path));
+            FrameTabItem item = OpenPage(jobConfig.Id, page, _settingsStartPage);
+            item.IsJobPage = true;
 
-            if (jobExplorerExpanded)
+            if (_jobExplorerExpanded)
             {
                 SwitchJobbExplorerExpanded();
             }
@@ -377,7 +382,7 @@ namespace Enable_Now_Konnektor_Editor
         /// </summary>
         private void ShowJobSettingButtons(bool visible)
         {
-            foreach (ToggleButton button in jobPageButtons)
+            foreach (ToggleButton button in _jobPageButtons)
             {
                 if (visible)
                 {
@@ -411,15 +416,15 @@ namespace Enable_Now_Konnektor_Editor
         /// <param name="pageName"></param>
         private void HighlightNavigationButton(string pageName)
         {
-            if (checkedToggleButton != null)
+            if (_checkedToggleButton != null)
             {
-                checkedToggleButton.IsChecked = false;
+                _checkedToggleButton.IsChecked = false;
             }
-            foreach (var control in NavigationPanel.Children)
+            foreach (object control in NavigationPanel.Children)
             {
                 if ((control is ToggleButton navButton) && navButton.Content.Equals(pageName))
                 {
-                    checkedToggleButton = navButton;
+                    _checkedToggleButton = navButton;
                     navButton.IsChecked = true;
                     break;
                 }
@@ -434,7 +439,7 @@ namespace Enable_Now_Konnektor_Editor
         private void OpenStartPage()
         {
             Page page = new StartPage(OpenJob);
-            OpenPage(startPageName, page);
+            OpenPage(_startPageName, page);
             ShowJobSettingButtons(false);
         }
 
@@ -445,7 +450,7 @@ namespace Enable_Now_Konnektor_Editor
         /// </summary>
         /// <param name="pageName"></param>
         /// <param name="page"></param>
-        private void OpenPage(string tabName, Page page, string pageName = null)
+        private FrameTabItem OpenPage(string tabName, Page page, string pageName = null)
         {
             if (pageName == null) pageName = tabName;
 
@@ -465,6 +470,7 @@ namespace Enable_Now_Konnektor_Editor
             }
             item.SelectedPage = pageName;
             HighlightNavigationButton(pageName);
+            return item;
         }
     }
 }
